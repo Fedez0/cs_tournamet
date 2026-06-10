@@ -35,7 +35,6 @@ class CreateTeamView(FormView):
         team = Team.objects.create(
             name=form.cleaned_data['name'],
             description=form.cleaned_data['description'],
-            icon=form.cleaned_data.get('icon'),
             leader=self.request.user  # <-- aggiungi questo
         )
         members = form.cleaned_data['members']

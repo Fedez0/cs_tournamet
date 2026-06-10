@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+    {% for tournament in tournaments %}
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">{{tournament.name}}</h4>
+            <p>{{tournament.date}}</p>
+            <p>{{tournament.location}}</p>
+            <p>{{tournament.prize}}</p>
+            <a href="{% url 'tournament-detail' tournament.pk %}" class="btn btn-primary">Dettagli</a>
+        </div>
+        
+
+    {% empty %}
+    <h2> <strong> nessun torneo trovato </strong> </h2>
+    {% endfor %}
+</div>
+{% endblock content %}

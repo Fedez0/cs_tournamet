@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+    {% if tournament.organizer != user %}
+        <p>Non hai i permessi per eliminare questo torneo.</p>
+        <a href="{% url 'tournament-detail' tournament.id %}">Torna al dettaglio del torneo</a>
+    {% else %}
+        <h1>Conferma eliminazione torneo</h1>
+        <p>Sei sicuro di voler eliminare il torneo "{{ tournament.name }}"?</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit">Sì, elimina</button>
+            <a href="{% url 'tournament-detail' tournament.id %}">No, torna indietro</a>
+        </form>
+    {% endif %}
+    
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+from django.shortcuts import render
+from django.views.generic import CreateView, TemplateView, DetailView, DeleteView
+from .models import Tournament
+from .forms import TournamentForm, TournamentSignUpForm
+from teams.models import Team
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import get_object_or_404, redirect
+from django.views import View
+
+# Create your views here.
+class TournamentCreateView(LoginRequiredMixin,CreateView):
+    model = Tournament
+    form_class = TournamentForm
+    template_name = 'tournaments/tournament_form.html'
+    # imposta l'organizzatore del torneo come l'utente attualmente loggato
+    def form_valid(self, form):
+        form.instance.organizer = self.request.user
+        return super().form_valid(form)
+    def get_success_url(self):
+
+        return '/'
+class TournamentListView(TemplateView):
+    model = Tournament
+    template_name = 'tournaments/tournament_list.html'
+    def get_context_data(self, **kwargs):
+        contex = super().get_context_data(**kwargs)
+        contex['tournaments'] = Tournament.objects.all()
+        return contex
+class TournamentDetailedView(DetailView):
+    model = Tournament
+    template_name = 'tournaments/tournament_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user = self.request.user
+        team = Team.objects.filter(leader=user).first()
+        context['free_slots'] = self.object.max_teams - self.object.teams.count()
+        context['my_team'] = team
+
+
+        return context
+class TournamentDeletedView(DeleteView): ##da fare
+    model = Tournament
+    template_name = 'tournaments/tournament_confirm_delete.html'
+    def get_success_url(self):
+        return '/'
+
+class TournamentSignUpView(LoginRequiredMixin, View):
+
+    def post(self, request, pk):
+
+        tournament = get_object_or_404(Tournament, pk=pk)
+
+        team = Team.objects.filter(leader=request.user).first()
+
+        if not team:
+
+            raise PermissionDenied()
+
+        if tournament.teams.filter(id=team.id).exists():
+
+            tournament.teams.remove(team)   # 👈 DISISCRIZIONE
+
+        else:
+
+            tournament.teams.add(team)      # 👈 ISCRIZIONE
+
+        return redirect('tournament-detail', pk=pk)
+
