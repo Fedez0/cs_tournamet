@@ -72,9 +72,6 @@ class LoginView(FormView):
 
     def form_valid(self, form):
 
-
-
-
         user = authenticate(
             username=form.cleaned_data['username'],
             password=form.cleaned_data['password']

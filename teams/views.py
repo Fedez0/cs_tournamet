@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView, FormView
+from django.views.generic import TemplateView, CreateView, FormView, DeleteView
 from .forms import TeamForm, ExitTeamForm
 from .models import Team
 from django.http import JsonResponse
@@ -35,15 +35,16 @@ class CreateTeamView(FormView):
         team = Team.objects.create(
             name=form.cleaned_data['name'],
             description=form.cleaned_data['description'],
-            icon=form.cleaned_data.get('icon')
+            icon=form.cleaned_data.get('icon'),
+            leader=self.request.user  # <-- aggiungi questo
         )
-        members = form.cleaned_data['members']  # già QuerySet
+        members = form.cleaned_data['members']
         team.members.set(members)
-        team.members.add(self.request.user)  # aggiungi te stesso
+        team.members.add(self.request.user)
         return super().form_valid(form)
     def get_success_url(self):
 
-        return '/'
+        return '/teams/list/'
 
 class TeamListView(TemplateView):
     template_name = 'teams/team_list.html'
@@ -52,6 +53,18 @@ class TeamListView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['team'] = self.request.user.teams.first()
         return context
+    
+class EliminateTeamView(DeleteView):
+    model = Team
+    template_name = 'teams/confirm_delete.html'
+    success_url = '/'
+
+    def get_object(self, queryset=None):
+        team = self.request.user.teams.first()
+        if team and team.leader == self.request.user:
+            return team
+        return None
+
 class ExitFromTeamView(FormView):
 
     template_name = 'teams/exit_team.html'
@@ -67,11 +80,18 @@ class ExitFromTeamView(FormView):
         return context
 
     def form_valid(self, form):
-
         team = self.request.user.teams.first()
 
         if team:
-
+            if team.leader_id == self.request.user.pk: 
+                remaining_members = team.members.exclude(pk=self.request.user.pk)
+                if remaining_members.exists():
+                    team.leader = remaining_members.first()
+                    team.save()  
+                else:
+                    team.delete()
+                    return super().form_valid(form)
+            
             team.members.remove(self.request.user)
 
         return super().form_valid(form)
@@ -79,3 +99,4 @@ class ExitFromTeamView(FormView):
     def get_success_url(self):
 
         return '/'
+    
