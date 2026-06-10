@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    {% if team %}
+        <h2>Il tuo Team:</h2>
+        <p><strong>Nome del Team:</strong> {{ team.name }}</p>
+        <p><strong>Descrizione:</strong> {{ team.description }}</p>
+
+        <h3>Membri del Team:</h3>
+        <ul>
+            {% for member in team.members.all %}
+                <li class="d-flex align-items-center gap-2 mb-2">
+                    {% if member.profile_picture %}
+                        <img src="{{ member.profile_picture.url }}" alt="{{ member.username }}" width="50" height="50" class="rounded-circle" style="object-fit: cover;">
+                    {% endif %}
+                    <span>{{ member.username }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'exit_team' %}" class="btn btn-danger">Esci dal Team</a>
+
+    {% else %}
+        <p>Non sei ancora in un team. <a href="/teams/create/">Crea un team ora!</a></p>
+    {% endif %}
+</div>
+{% endblock %}

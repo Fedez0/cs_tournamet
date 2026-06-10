@@ -1,5 +1,5 @@
 import django.forms as forms
-
+import pycountry
 from .models import User
 
 
@@ -16,9 +16,11 @@ class UserCreationForm(forms.Form):
     )
 
 
+
+
 class EditProfileForm(forms.Form):
     model = User
-
+    COUNTRIES = [(country.alpha_2, country.name) for country in pycountry.countries]
     username = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control'}),
         required=False
@@ -32,14 +34,31 @@ class EditProfileForm(forms.Form):
         widget=forms.EmailInput(attrs={'class': 'form-control'}),
         required=False
     )
-    paese = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control'}),
-        required=False
+    paese = forms.ChoiceField(
+        ## fai che di default sia italia, così se non lo selezionano è già impostato
+        choices=COUNTRIES,
+        initial='IT',
+        
+        required=False,
+        widget=forms.Select(attrs={
+            'class': 'form-select'  # Bootstrap 5 (meglio di form-control)
+        })
     )
     phone_number = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control'}),
-        required=False
-    )
+
+    required=False,
+
+    widget=forms.TextInput(attrs={
+
+        'class': 'form-control',
+
+        'inputmode': 'tel',
+
+        'placeholder': '+39 333 123 4567'
+
+    })
+
+)
     profile_picture = forms.ImageField(
         widget=forms.ClearableFileInput(attrs={'class': 'form-control'}),
         required=False
@@ -59,5 +78,3 @@ class UserLoginForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={'class': 'form-control'})
     )
-
-    

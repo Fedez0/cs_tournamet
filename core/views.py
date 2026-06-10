@@ -31,7 +31,7 @@ class SignUpView(FormView):
             password=form.cleaned_data['password1'],
             paese=form.cleaned_data.get('paese', ''),
             phone_number=form.cleaned_data.get('phone_number', ''),
-            profile_picture=form.cleaned_data.get('profile_picture', None)
+    
         )
         login(self.request, user)
         return super().form_valid(form)
@@ -92,6 +92,16 @@ class LoginView(FormView):
 class ProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'user/profile.html'
     login_url = '/login/'
+
+class DeleteAccountView(LoginRequiredMixin, TemplateView):
+    template_name = 'user/delete_account.html'
+    login_url = '/login/'
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        user.delete()
+        logout(request)
+        return redirect('/login/')
 
 
 

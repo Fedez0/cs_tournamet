@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Crea una nuova squadra</h2>
+
+    {% if team %}
+        <div class="alert alert-info">
+            Sei già nel team: <strong>{{ team.name }}</strong>
+        </div>
+    {% else %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Crea Squadra</button>
+        </form>
+    {% endif %}
+
+    
+</div>
+{% endblock %}

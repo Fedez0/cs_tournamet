@@ -30,13 +30,15 @@
             <p>Email: {{ user.email }}</p>
         {% endif %}
         {% if user.paese %}
-            <p>Paese: {{ user.paese }}</p>
+            <p>Paese: {{ user.paese }}. todo: mettere la bandiera di fianco</p>
+
         {% endif %}
         {% if user.phone_number %}
             <p>Numero di telefono: {{ user.phone_number }}</p>
         {% endif %}
 
         <a href="/edit-profile/">Edit Profile</a>
+        <a href="/delete-account/" class="text-danger ms-3">Delete Account</a>
     {% else %}
         <p>Devi essere autenticato per vedere il tuo profilo.</p>
     {% endif %}

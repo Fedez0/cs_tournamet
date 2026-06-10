@@ -7,19 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body class="d-flex flex-column min-vh-100">
-    <nav class="navbar navbar-dark bg-dark">
-
-        <div class="container-fluid">
-
-            <a class="navbar-brand fw-bold" href="/">
-
-                cs_tournament
-
-            </a>
-
-        </div>
-
-    </nav>
+    {% include "components/header.html" %}
     
     
     
@@ -36,20 +24,7 @@
     
     
     
-    <footer class="bg-dark text-white text-center py-3 mt-auto">
-        <div class="container">
-
-            {% if debug %}
-                <small class="text-warning fw-semibold">
-                    Work in progress
-                </small>
-            {% else %}
-                <small>
-                    © {{ now|date:"Y" }} cs_tournament
-                </small>
-            {% endif %}
-
-        </div>
-    </footer>
+    
+    {% include "components/footer.html" %}
 </body>
 </html>

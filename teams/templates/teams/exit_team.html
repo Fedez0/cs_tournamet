@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+    
+{% block content %}
+    <h1>Exit Team</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, Exit Team</button>
+        <a href="{% url 'home' %}">No, Go Back</a>
+    </form>
+{% endblock %}

@@ -1,0 +1,15 @@
+<footer class="bg-dark text-white text-center py-3 mt-auto">
+        <div class="container">
+
+            {% if debug %}
+                <small class="text-warning fw-semibold">
+                    Work in progress
+                </small>
+            {% else %}
+                <small>
+                    © {{ now|date:"Y" }} cs_tournament
+                </small>
+            {% endif %}
+
+        </div>
+    </footer>
