@@ -1,13 +1,14 @@
 from django.shortcuts import render
-from django.views.generic import CreateView, TemplateView, DetailView, DeleteView
+from django.views.generic import CreateView, TemplateView, DetailView, DeleteView, UpdateView
 from .models import Tournament
 from .forms import TournamentForm, TournamentSignUpForm
 from teams.models import Team
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
 from django.views import View
+from django.utils import timezone
 
 # Create your views here.
 class TournamentCreateView(LoginRequiredMixin,CreateView):
@@ -27,6 +28,8 @@ class TournamentListView(TemplateView):
     def get_context_data(self, **kwargs):
         contex = super().get_context_data(**kwargs)
         contex['tournaments'] = Tournament.objects.all()
+        ## mando nel contex la data di oggi cosi nel html la confronto con la data di inizio del torneo per capire se è passato o no
+        contex['today'] = timezone.now().date()
         return contex
 class TournamentDetailedView(DetailView):
     model = Tournament
@@ -70,3 +73,28 @@ class TournamentSignUpView(LoginRequiredMixin, View):
 
         return redirect('tournament-detail', pk=pk)
 
+
+
+class TournamentWinnerView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+
+    model = Tournament
+
+    fields = ['winner']
+
+    template_name = 'tournaments/tournament_set_winner.html'
+
+    def test_func(self):
+
+        tournament = self.get_object()
+
+        return tournament.organizer == self.request.user
+
+    def get_success_url(self):
+
+        return reverse_lazy(
+
+            'tournament_detail',
+
+            kwargs={'pk': self.object.pk}
+
+        )

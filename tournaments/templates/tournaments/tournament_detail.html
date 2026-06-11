@@ -9,6 +9,7 @@
     <p> Slot disponibili: [ {{free_slots}} / {{tournament.max_teams}} ]</p>
     {%if user.is_authenticated and tournament.organizer == user %}
         <a href="{% url 'tournament-delete' tournament.id %}">Elimina torneo</a>
+    
     {% endif %}
 
     {% if user.is_authenticated and my_team %}

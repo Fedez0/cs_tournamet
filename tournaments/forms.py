@@ -12,6 +12,19 @@ class TournamentForm(forms.ModelForm):
             'max_teams': forms.NumberInput(attrs={'class': 'form-control'}),
             
         }
+    def clean_name(self):
+
+        name = self.cleaned_data['name']
+
+        if Tournament.objects.filter(name__iexact=name).exists():
+
+            raise forms.ValidationError(
+
+                "Esiste già un torneo con questo nome."
+
+            )
+
+        return name
 class TournamentSignUpForm(forms.Form):
     # Aggiungi campi specifici per la registrazione al torneo, ad esempio:
     team_name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))

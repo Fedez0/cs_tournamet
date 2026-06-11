@@ -5,7 +5,7 @@ from .views import(
     TournamentListView,
     TournamentDetailedView,
     TournamentSignUpView,
-    TournamentDeletedView
+    TournamentDeletedView,
 )
 
 urlpatterns = [

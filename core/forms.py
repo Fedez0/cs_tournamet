@@ -14,7 +14,20 @@ class UserCreationForm(forms.Form):
     password2 = forms.CharField(
         widget=forms.PasswordInput(attrs={'class': 'form-control'})
     )
+    def clean_username(self):
 
+        username = self.cleaned_data['username']
+
+        if User.objects.filter(username__iexact=username).exists():
+
+            raise forms.ValidationError(
+
+                "Esiste già un utente con questo username."
+
+            )
+
+        return username
+    
 
 
 

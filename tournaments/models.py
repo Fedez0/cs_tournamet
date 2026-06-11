@@ -12,7 +12,8 @@ class Tournament(models.Model):
     prize = models.CharField(max_length=200, blank=True, null=True)
     organizer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='organized_tournaments')
     max_teams = models.PositiveIntegerField(default=16)
-
+    winner = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, blank=True, related_name='won_tournaments')
+    
 
     def __str__(self):
         return self.name

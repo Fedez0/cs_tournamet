@@ -8,9 +8,23 @@ class TeamForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}), required=False)
     icon = forms.ImageField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}), required=False)
     members = forms.CharField(widget=forms.HiddenInput(), required=False)  # IDs separati da virgola
+    def clean_name(self):
 
+        name = self.cleaned_data['name']
+
+        if Team.objects.filter(name__iexact=name).exists():
+
+            raise forms.ValidationError(
+
+                "Esiste già un team con questo nome."
+
+            )
+
+        return name
+    
     def clean_members(self):
         raw = self.cleaned_data.get('members', '')
+
         if not raw:
             return []
         try:

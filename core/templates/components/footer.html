@@ -5,6 +5,9 @@
                 <small class="text-warning fw-semibold">
                     Work in progress
                 </small>
+                {% if user.username == 'admin' %}
+                    <a href="/admin/"> admin panel</a>
+                {% endif%}
             {% else %}
                 <small>
                     © {{ now|date:"Y" }} cs_tournament

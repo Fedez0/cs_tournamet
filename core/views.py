@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
+from teams.models import Team
 
 
 from .models import User
@@ -15,6 +16,10 @@ from .models import User
 class HomeView(LoginRequiredMixin,TemplateView): 
     template_name = 'home/index.html'
     login_url = '/login/'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['team'] = self.request.user.teams.first()
+        return  context
    
 
 class SignUpView(FormView):

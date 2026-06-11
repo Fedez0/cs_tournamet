@@ -3,7 +3,7 @@ from core.models import User
 # Create your models here.
 
 class Team(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
     icon = models.ImageField(upload_to='team_icons/', default='team_icons/default.png')
     members = models.ManyToManyField(User, related_name='teams')

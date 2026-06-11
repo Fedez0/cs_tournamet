@@ -7,6 +7,13 @@
             <p>{{tournament.date}}</p>
             <p>{{tournament.location}}</p>
             <p>{{tournament.prize}}</p>
+            <p class="mb-0">
+                {% if tournament.date < today %}
+                    <span class="badge bg-secondary">Finito</span>
+                {% else %}
+                    <span class="badge bg-success">Aperto</span>
+                {% endif %}
+        
             <a href="{% url 'tournament-detail' tournament.pk %}" class="btn btn-primary">Dettagli</a>
         </div>
         

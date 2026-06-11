@@ -6,8 +6,11 @@
     {% if user.is_authenticated %}
         <h1>Bentornato {{ user.username }}!</h1>
         <a href="/logout/">Logout</a>
-        <a href="/teams/create/">Crea Squadra</a>
-        <a href="/teams/list/">Visualizza Squadra</a>
+        {% if team is not None %}
+            <a href="/teams/list/">Visualizza Squadra</a>
+        {% else %}
+            <a href="/teams/create/">Crea Squadra</a>
+        {% endif %}
         <a href="/profile/">View Profile</a>
         <a href="/tournaments/create/">Crea torneo</a>
         <a href="/tournaments/list/">Vedi i tornei </a>
