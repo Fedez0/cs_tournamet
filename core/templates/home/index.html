@@ -5,7 +5,7 @@
 {% block content %}
     {% if user.is_authenticated %}
         <h1>Bentornato {{ user.username }}!</h1>
-        <a href="/logout/">Logout</a>
+        
         {% if team is not None %}
             <a href="/teams/list/">Visualizza Squadra</a>
         {% else %}
@@ -13,7 +13,6 @@
         {% endif %}
         <a href="/profile/">View Profile</a>
         <a href="/tournaments/create/">Crea torneo</a>
-        <a href="/tournaments/list/">Vedi i tornei </a>
     
     {% else %}
         <h1>Devi autenticarti!</h1>
